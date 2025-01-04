@@ -1,5 +1,4 @@
 import React from 'react';
-import { Loader2 } from 'lucide-react';
 
 interface SubmitButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
@@ -16,10 +15,8 @@ export function SubmitButton({ children, isLoading, ...props }: SubmitButtonProp
         bg-gradient-to-r from-blue-600 to-cyan-500
         hover:opacity-90 transition-opacity
         disabled:opacity-50 disabled:cursor-not-allowed
-        flex items-center justify-center gap-2
       `}
     >
-      {isLoading && <Loader2 className="h-5 w-5 animate-spin" />}
       {isLoading ? 'Please wait...' : children}
     </button>
   );
