@@ -35,8 +35,9 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
           try {
             setUser(JSON.parse(savedUser));
             setIsAuthenticated(true);
+            console.log('AuthContext: Initial user loaded from localStorage:', JSON.parse(savedUser));
           } catch (error) {
-            console.error('Error parsing user from localStorage:', error);
+            console.error('AuthContext: Error parsing user from localStorage:', error);
             localStorage.removeItem('user');
             localStorage.removeItem('token');
           }
@@ -52,7 +53,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
           localStorage.setItem('user', JSON.stringify(user));
           console.log('AuthContext: Login successful, user:', user);
         } catch (error) {
-          console.error('Login failed:', error);
+          console.error('AuthContext: Login failed:', error);
           throw error;
         }
       };
@@ -73,7 +74,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
           localStorage.setItem('user', JSON.stringify(user));
           console.log('AuthContext: Registration successful, user:', user);
         } catch (error) {
-          console.error('Registration failed:', error);
+          console.error('AuthContext: Registration failed:', error);
           throw error;
         }
       };
@@ -90,7 +91,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
           localStorage.setItem('user', JSON.stringify(updatedUser));
           console.log('AuthContext: Profile update successful, user:', updatedUser);
         } catch (error) {
-          console.error('Profile update failed:', error);
+          console.error('AuthContext: Profile update failed:', error);
           throw error;
         }
       };
