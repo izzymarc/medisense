@@ -29,7 +29,7 @@ import { authService } from '../services/auth.service.js';
       login: async (req, res, next) => {
         try {
           const { email, password } = req.body;
-          console.log('Server: Attempting login with:', { email, password });
+          
           // Validate credentials
           const user = await authService.validateLogin({ email, password });
           
@@ -40,9 +40,7 @@ import { authService } from '../services/auth.service.js';
             token, 
             user: { id: user._id, name: user.name, email: user.email }
           });
-          console.log('Server: Login successful, user:', { id: user._id, name: user.name, email: user.email });
         } catch (error) {
-          console.error('Server: Login failed:', error);
           next(error);
         }
       }

@@ -8,7 +8,6 @@ import express from 'express';
     import symptomRoutes from './routes/symptom.js';
     import path from 'path';
     import { fileURLToPath } from 'url';
-    import mongoose from 'mongoose';
 
     dotenv.config();
 
@@ -26,19 +25,6 @@ import express from 'express';
     app.use('/api/auth', authRoutes);
     app.use('/api/profile', profileRoutes);
     app.use('/api/symptoms', symptomRoutes);
-
-    // Test DB Route
-    app.get('/test-db', async (req, res) => {
-      try {
-        await mongoose.connect(process.env.MONGODB_URI);
-        res.send('Database connection successful!');
-      } catch (error) {
-        console.error('Database connection failed:', error);
-        res.status(500).send(`Database connection failed: ${error.message}`);
-      } finally {
-        await mongoose.disconnect();
-      }
-    });
 
     // Error handling middleware
     app.use(errorHandler);
