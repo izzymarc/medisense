@@ -30,11 +30,14 @@ import axios from 'axios';
     export const auth = {
       login: async (email: string, password: string) => {
         try {
+          console.log('API: Attempting login with:', { email, password });
           const response = await api.post('/auth/login', { email, password });
           const data = handleResponse(response);
           localStorage.setItem('token', data.token);
+          console.log('API: Login successful, response:', data);
           return data;
         } catch (error) {
+          console.error('API: Login failed:', error);
           handleError(error);
         }
       },
