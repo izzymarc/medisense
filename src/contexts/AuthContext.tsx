@@ -5,6 +5,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
       id: string;
       name: string;
       email: string;
+      profilePicture?: string;
     }
 
     interface AuthContextType {
@@ -18,6 +19,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
         email?: string;
         currentPassword?: string;
         newPassword?: string;
+        profilePicture?: string;
       }) => Promise<void>;
     }
 
@@ -47,7 +49,13 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
       const login = async (email: string, password: string) => {
         try {
-          const { user } = await authApi.login(email, password);
+          const { user: apiUser } = await authApi.login(email, password);
+          const user = {
+            id: apiUser.id,
+            name: apiUser.name,
+            email: apiUser.email,
+            profilePicture: apiUser.profilePicture
+          };
           setUser(user);
           setIsAuthenticated(true);
           localStorage.setItem('user', JSON.stringify(user));
@@ -68,7 +76,13 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
       const register = async (name: string, email: string, password: string) => {
         try {
-          const { user } = await authApi.register(name, email, password);
+          const { user: apiUser } = await authApi.register(name, email, password);
+          const user = {
+            id: apiUser.id,
+            name: apiUser.name,
+            email: apiUser.email,
+            profilePicture: apiUser.profilePicture
+          };
           setUser(user);
           setIsAuthenticated(true);
           localStorage.setItem('user', JSON.stringify(user));
@@ -84,12 +98,19 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
         email?: string;
         currentPassword?: string;
         newPassword?: string;
+        profilePicture?: string;
       }) => {
         try {
           const updatedUser = await profileApi.update(updates);
-          setUser(updatedUser);
-          localStorage.setItem('user', JSON.stringify(updatedUser));
-          console.log('AuthContext: Profile update successful, user:', updatedUser);
+          const user = {
+            id: updatedUser.id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            profilePicture: updatedUser.profilePicture
+          };
+          setUser(user);
+          localStorage.setItem('user', JSON.stringify(user));
+          console.log('AuthContext: Profile update successful, user:', user);
         } catch (error) {
           console.error('AuthContext: Profile update failed:', error);
           throw error;
