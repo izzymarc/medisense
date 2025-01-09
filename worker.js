@@ -46,25 +46,48 @@ export default {
 
     async function handleRegister(request, env, corsHeaders) {
       try {
+        // Log incoming request details
+        console.log("Incoming request:", request);
+
+        const contentType = request.headers.get("Content-Type");
+        if (contentType !== "application/json") {
+          return new Response(
+            JSON.stringify({ error: "Invalid Content-Type. Expected 'application/json'" }),
+            { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+
         const body = await request.json();
+        console.log("Parsed request body:", body);
+
         const { name, email, password } = body;
 
-        const response = await fetch('https://medisense.pages.dev/api/auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, password }),
-        });
+        // Check if fields are missing
+        if (!name || !email || !password) {
+          return new Response(
+            JSON.stringify({ error: "Missing required fields: name, email, or password" }),
+            { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
 
-        const data = await response.json();
-        return new Response(JSON.stringify(data), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        // Simulated database insertion (replace with actual logic)
+        const response = {
+          message: "Registration successful",
+          user: { name, email },
+        };
+
+        return new Response(JSON.stringify(response), {
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json",
+          },
         });
       } catch (error) {
-        console.error('Error:', error);
-        return new Response(JSON.stringify({ error: error.message }), {
-          status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+        console.error("Error in handleRegister:", error);
+        return new Response(
+          JSON.stringify({ error: error.message }),
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
       }
     }
 
