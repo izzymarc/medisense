@@ -9,4 +9,4 @@ name = "my-backend"
     [[d1_databases]]
     binding = "MEDISENSE_D1"
     database_name = "medisense_d1"
-    database_id = "your-database-id" # Replace with your actual database ID
+    database_id = "8adb4d6c-7092-456a-8ec4-d8889e0abe1a"
