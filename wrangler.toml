@@ -1,14 +1,8 @@
 name = "my-backend"
     main = "worker.js"
     compatibility_date = "2023-01-01"
-    type = "javascript-module"
 
     [[d1_databases]]
     binding = "MEDISENSE_D1"
     database_name = "medisense_d1"
     database_id = "8adb4d6c-7092-456a-8ec4-d8889e0abe1a"
-
-    migrations_dir = "./"
-
-    [build]
-    command = ""
