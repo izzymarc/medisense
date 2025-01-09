@@ -1,11 +1,10 @@
 name = "my-backend"
-    main = "worker.js"
-    compatibility_date = "2023-01-01"
+main = "index.js"
+compatibility_date = "2023-01-01"
 
-    [[d1_databases]]
-    binding = "MEDISENSE_D1"
-    database_name = "medisense_d1"
-    database_id = "8adb4d6c-7092-456a-8ec4-d8889e0abe1a"
+[[d1_databases]]
+binding = "MEDISENSE_D1"
+database_name = "medisense_d1"
+database_id = "8adb4d6c-7092-456a-8ec4-d8889e0abe1a"
 
-    [migrations]
-    dir = "./migrations"
+migrations_dir = "./migrations"
