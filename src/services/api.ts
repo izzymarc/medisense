@@ -1,7 +1,7 @@
 import axios from 'axios';
 
     const api = axios.create({
-      baseURL: 'https://yellow-union-83aa.izzymarc.workers.dev/',
+      baseURL: 'https://my-backend.izzymarc.workers.dev',
       headers: {
         'Content-Type': 'application/json',
       },
