@@ -1,7 +1,7 @@
 import axios from 'axios';
 
     const api = axios.create({
-      baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
+      baseURL: 'https://yellow-union-83aa.izzymarc.workers.dev/',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -31,7 +31,7 @@ import axios from 'axios';
       login: async (email: string, password: string) => {
         try {
           console.log('API: Attempting login with:', { email, password });
-          const response = await api.post('/auth/login', { email, password });
+          const response = await api.post('/api/auth/login', { email, password });
           const data = handleResponse(response);
           localStorage.setItem('token', data.token);
           console.log('API: Login successful, data:', data);
@@ -41,11 +41,11 @@ import axios from 'axios';
           handleError(error);
         }
       },
-      
+
       register: async (name: string, email: string, password: string) => {
         try {
           console.log('API: Attempting registration with:', { name, email, password });
-          const response = await api.post('/auth/register', { name, email, password });
+          const response = await api.post('/api/auth/register', { name, email, password });
           const data = handleResponse(response);
           localStorage.setItem('token', data.token);
           console.log('API: Registration successful, data:', data);
@@ -55,7 +55,7 @@ import axios from 'axios';
           handleError(error);
         }
       },
-      
+
       logout: () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -66,7 +66,7 @@ import axios from 'axios';
     export const profile = {
       get: async () => {
         try {
-          const response = await api.get('/profile');
+          const response = await api.get('/api/profile');
           return handleResponse(response);
         } catch (error) {
           handleError(error);
@@ -81,7 +81,7 @@ import axios from 'axios';
         profilePicture?: string;
       }) => {
         try {
-          const response = await api.patch('/profile', updates, {
+          const response = await api.patch('/api/profile', updates, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
@@ -96,7 +96,7 @@ import axios from 'axios';
     export const gemini = {
       checkSymptoms: async (symptoms: { description: string, severity: string }[]) => {
         try {
-          const response = await api.post('/symptoms/check', { symptoms });
+          const response = await api.post('/api/symptoms/check', { symptoms });
           return handleResponse(response);
         } catch (error) {
           handleError(error);

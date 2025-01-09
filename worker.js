@@ -5,6 +5,9 @@ addEventListener('fetch', event => {
     async function handleRequest(request) {
       const url = new URL(request.url);
 
+      console.log("URL path:", url.pathname);
+      console.log("Request method:", request.method);
+
       if (url.pathname === '/api/preferences' && request.method === 'POST') {
         return handleSetPreference(request);
       }
