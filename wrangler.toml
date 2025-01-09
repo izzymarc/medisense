@@ -1,5 +1,5 @@
 name = "my-backend"
-    main = "index.js"
+    main = "worker.js"
     compatibility_date = "2023-01-01"
 
     [vars]
