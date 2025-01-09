@@ -1,38 +1,37 @@
-addEventListener('fetch', (event) => {
-      event.respondWith(handleRequest(event.request));
-    });
+export default {
+      async fetch(request, env, ctx) {
+        const url = new URL(request.url);
 
-    async function handleRequest(request) {
-      const url = new URL(request.url);
+        const corsHeaders = {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        };
 
-      const corsHeaders = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      };
+        if (request.method === 'OPTIONS') {
+          return new Response(null, { headers: corsHeaders });
+        }
 
-      if (request.method === 'OPTIONS') {
-        return new Response(null, { headers: corsHeaders });
-      }
+        // Handle /api/users to fetch all users
+        if (url.pathname === '/api/users' && request.method === 'GET') {
+          return handleGetUsers(env, corsHeaders);
+        }
 
-      // Handle /api/users to fetch all users
-      if (url.pathname === '/api/users' && request.method === 'GET') {
-        return handleGetUsers(corsHeaders, env);
-      }
+        // Handle /api/preferences to fetch user preferences
+        if (url.pathname === '/api/preferences' && request.method === 'GET') {
+          return handleGetPreferences(request, env, corsHeaders);
+        }
 
-      // Handle /api/preferences to fetch user preferences
-      if (url.pathname === '/api/preferences' && request.method === 'GET') {
-        return handleGetPreferences(request, corsHeaders, env);
-      }
+        // Default 404 Response
+        return new Response(JSON.stringify({ error: 'Not Found' }), {
+          status: 404,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      },
+    };
 
-      // Default 404 Response
-      return new Response(JSON.stringify({ error: 'Not Found' }), {
-        status: 404,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    async function handleGetUsers(corsHeaders, env) {
+    // Fetch all users
+    async function handleGetUsers(env, corsHeaders) {
       try {
         const stmt = env.MEDISENSE_D1.prepare('SELECT * FROM users;');
         const result = await stmt.all();
@@ -48,7 +47,8 @@ addEventListener('fetch', (event) => {
       }
     }
 
-    async function handleGetPreferences(request, corsHeaders, env) {
+    // Fetch preferences for a specific user
+    async function handleGetPreferences(request, env, corsHeaders) {
       try {
         const userId = new URL(request.url).searchParams.get('userId');
         if (!userId) {
