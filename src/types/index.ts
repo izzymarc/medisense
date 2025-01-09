@@ -4,7 +4,7 @@ export interface Symptom {
       severity: 'mild' | 'moderate' | 'severe';
       timestamp: string;
     }
-
+    
     export interface SymptomLog {
       _id: string;
       symptoms: Symptom[];
@@ -12,7 +12,7 @@ export interface Symptom {
       createdAt: string;
       userId: string;
     }
-
+    
     export interface User {
       id: string;
       name: string;
