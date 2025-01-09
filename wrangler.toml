@@ -1,0 +1,12 @@
+name = "my-backend"
+    main = "index.js"
+    compatibility_date = "2023-01-01"
+
+    [vars]
+    MONGODB_DATA_API_KEY = "your-mongodb-data-api-key"
+    MONGODB_DATA_SOURCE = "your-mongodb-data-source"
+
+    [[d1_databases]]
+    binding = "MEDISENSE_D1"
+    database_name = "medisense_d1"
+    database_id = "your-database-id" # Replace with your actual database ID
