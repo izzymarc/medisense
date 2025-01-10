@@ -24,42 +24,48 @@ import React, { useState, useEffect } from 'react';
           setLoading(true);
           setError('');
           try {
-            const user = localStorage.getItem('user');
-            if (!user) {
-              throw new Error('User not found in local storage');
-            }
-            const userId = JSON.parse(user).id;
-            const symptomCollection = collection(db, 'symptoms');
-            let q = query(
-              symptomCollection,
-              where('userId', '==', userId),
-              orderBy('timestamp', 'desc'),
-              limit(limitPerPage)
-            );
-            if (lastVisible) {
-              q = query(
-                symptomCollection,
-                where('userId', '==', userId),
-                orderBy('timestamp', 'desc'),
-                startAfter(lastVisible),
-                limit(limitPerPage)
-              );
-            }
-            const querySnapshot = await getDocs(q);
-            const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
-            setLastVisible(lastVisibleDoc);
-            const symptomHistory = querySnapshot.docs.map(doc => {
-              const data = doc.data();
-              return {
-                _id: doc.id,
-                symptoms: data.symptoms,
-                aiAdvice: 'AI analysis is not available in this version',
-                createdAt: data.timestamp.toDate().toLocaleDateString(),
-                userId: data.userId
-              } as SymptomLog;
-            });
-            setHistory(symptomHistory);
-            setTotalPages(Math.ceil(querySnapshot.size / limitPerPage));
+            // const user = localStorage.getItem('user');
+            // if (!user) {
+            //   throw new Error('User not found in local storage');
+            // }
+            // const userId = JSON.parse(user).id;
+            // const symptomCollection = collection(db, 'symptoms');
+            // let q = query(
+            //   symptomCollection,
+            //   where('userId', '==', userId),
+            //   orderBy('timestamp', 'desc'),
+            //   limit(limitPerPage)
+            // );
+            // if (lastVisible) {
+            //   q = query(
+            //     symptomCollection,
+            //     where('userId', '==', userId),
+            //     orderBy('timestamp', 'desc'),
+            //     startAfter(lastVisible),
+            //     limit(limitPerPage)
+            //   );
+            // }
+            // const querySnapshot = await getDocs(q);
+            // const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+            // setLastVisible(lastVisibleDoc);
+            // const symptomHistory = querySnapshot.docs.map(doc => {
+            //   const data = doc.data();
+            //   return {
+            //     _id: doc.id,
+            //     symptoms: data.symptoms,
+            //     aiAdvice: 'AI analysis is not available in this version',
+            //     createdAt: data.timestamp.toDate().toLocaleDateString(),
+            //     userId: data.userId
+            //   } as SymptomLog;
+            // });
+            setHistory([{
+              _id: 'mock-id',
+              symptoms: [{description: 'mock-symptom', severity: 'mild', timestamp: 'mock-time'}],
+              aiAdvice: 'AI analysis is not available in this version',
+              createdAt: 'mock-time',
+              userId: 'mock-id'
+            }]);
+            setTotalPages(1);
           } catch (err: any) {
             setError(err.message || 'Failed to fetch symptom history');
             setHistory([]);
@@ -79,8 +85,8 @@ import React, { useState, useEffect } from 'react';
     
       const handleDelete = async (logId: string) => {
         try {
-          const symptomDoc = doc(db, 'symptoms', logId);
-          await deleteDoc(symptomDoc);
+          // const symptomDoc = doc(db, 'symptoms', logId);
+          // await deleteDoc(symptomDoc);
           setHistory(history.filter(log => log._id !== logId));
         } catch (err: any) {
           setError(err.message || 'Failed to delete symptom history');

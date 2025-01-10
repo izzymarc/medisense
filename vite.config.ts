@@ -1,14 +1,21 @@
 import { defineConfig } from 'vite';
     import react from '@vitejs/plugin-react';
     
-    // https://vitejs.dev/config/
     export default defineConfig({
       plugins: [react()],
-      optimizeDeps: {
-        exclude: ['lucide-react'],
-      },
-      base: '/',
-      server: {
-        historyApiFallback: true
+      build: {
+        rollupOptions: {
+          output: {
+            manualChunks(id) {
+              if (id.includes('node_modules')) {
+                return 'vendor';
+              }
+              if (id.includes('src/components')) {
+                return 'components';
+              }
+              return 'index';
+            },
+          },
+        },
       },
     });
