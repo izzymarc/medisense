@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
     import { auth as authApi, profile as profileApi } from '../services/api';
-
+    
     interface User {
       id: string;
       name: string;
       email: string;
       profilePicture?: string;
     }
-
+    
     interface AuthContextType {
       isAuthenticated: boolean;
       user: User | null;
@@ -22,14 +22,14 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
         profilePicture?: string;
       }) => Promise<void>;
     }
-
+    
     const AuthContext = createContext<AuthContextType | null>(null);
-
+    
     export function AuthProvider({ children }: { children: React.ReactNode }) {
       const [isAuthenticated, setIsAuthenticated] = useState(false);
       const [user, setUser] = useState<User | null>(null);
       const [loading, setLoading] = useState(true);
-
+    
       useEffect(() => {
         const token = localStorage.getItem('token');
         const savedUser = localStorage.getItem('user');
@@ -46,7 +46,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
         }
         setLoading(false);
       }, []);
-
+    
       const login = async (email: string, password: string) => {
         try {
           const { user: apiUser } = await authApi.login(email, password);
@@ -65,7 +65,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
           throw error;
         }
       };
-
+    
       const logout = () => {
         authApi.logout();
         setUser(null);
@@ -73,7 +73,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
         localStorage.removeItem('user');
         console.log('AuthContext: Logout successful');
       };
-
+    
       const register = async (name: string, email: string, password: string) => {
         try {
           const { user: apiUser } = await authApi.register(name, email, password);
@@ -92,7 +92,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
           throw error;
         }
       };
-
+    
       const updateProfile = async (updates: {
         name?: string;
         email?: string;
@@ -116,18 +116,18 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
           throw error;
         }
       };
-
+    
       if (loading) {
         return <div>Loading...</div>;
       }
-
+    
       return (
         <AuthContext.Provider value={{ isAuthenticated, user, login, logout, register, updateProfile }}>
           {children}
         </AuthContext.Provider>
       );
     }
-
+    
     export function useAuth() {
       const context = useContext(AuthContext);
       if (!context) {
