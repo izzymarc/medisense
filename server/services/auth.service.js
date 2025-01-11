@@ -1,5 +1,5 @@
-import { User } from '../models/User.js';
-    import jwt from 'jsonwebtoken';
+import { auth as firebaseAuth } from '../../src/firebase';
+    import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
     import { ValidationError, AuthenticationError } from '../utils/errors.js';
 
     export const authService = {
@@ -11,26 +11,27 @@ import { User } from '../models/User.js';
         }
       },
 
-      async checkExistingUser(email) {
-        const user = await User.findOne({ email });
-        if (user) throw new ValidationError('Email already registered');
-      },
-
       async createUser({ name, email, password }) {
-        const user = new User({ name, email, password });
-        await user.save();
-        return user;
+        try {
+          const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
+          const user = userCredential.user;
+          await firebaseAuth.updateProfile(user, { displayName: name });
+          return user;
+        } catch (error) {
+          throw new ValidationError('Email already registered');
+        }
       },
 
       generateToken(userId) {
-        return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        return userId;
       },
 
       async validateLogin({ email, password }) {
-        const user = await User.findOne({ email });
-        if (!user || !(await user.comparePassword(password))) {
+        try {
+          const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
+          return userCredential.user;
+        } catch (error) {
           throw new AuthenticationError('Invalid credentials');
         }
-        return user;
       }
     };

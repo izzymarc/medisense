@@ -1,7 +1,6 @@
 import express from 'express';
     import cors from 'cors';
     import dotenv from 'dotenv';
-    import { connectDB } from './config/database.js';
     import { errorHandler } from './utils/errors.js';
     import authRoutes from './routes/auth.js';
     import profileRoutes from './routes/profile.js';
@@ -38,12 +37,7 @@ import express from 'express';
       }
     });
 
-    // Connect to MongoDB before starting the server
-    connectDB().then(() => {
-      const PORT = process.env.PORT || 5000;
-      app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-      });
-    }).catch(err => {
-      console.error('Failed to connect to MongoDB:', err);
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
     });
