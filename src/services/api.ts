@@ -162,6 +162,7 @@ import axios from 'axios';
             }
           );
           const aiAdvice = response.data.candidates[0].content.parts[0].text;
+          console.log('Gemini API Response:', aiAdvice);
           const docRef = await addDoc(symptomCollection, {
             userId: user.uid,
             symptoms,
