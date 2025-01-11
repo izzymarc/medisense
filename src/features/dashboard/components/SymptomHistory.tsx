@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
     import { useAuth } from '../../../contexts/AuthContext';
     import { collection, query, where, getDocs, deleteDoc, doc, orderBy, limit, startAfter } from 'firebase/firestore';
     import { db } from '../../../firebase';
-    
+
     export function SymptomHistory() {
       const [history, setHistory] = useState<SymptomLog[]>([]);
       const [loading, setLoading] = useState(true);
@@ -14,7 +14,7 @@ import React, { useState, useEffect } from 'react';
       const { isAuthenticated } = useAuth();
       const [lastVisible, setLastVisible] = useState<any>(null);
       const limitPerPage = 5;
-    
+
       useEffect(() => {
         const fetchHistory = async () => {
           if (!isAuthenticated) {
@@ -67,16 +67,16 @@ import React, { useState, useEffect } from 'react';
             setLoading(false);
           }
         };
-    
+
         fetchHistory();
       }, [isAuthenticated, page]);
-    
+
       const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
           setPage(newPage);
         }
       };
-    
+
       const handleDelete = async (logId: string) => {
         try {
           const symptomDoc = doc(db, 'symptoms', logId);
@@ -86,23 +86,23 @@ import React, { useState, useEffect } from 'react';
           setError(err.message || 'Failed to delete symptom history');
         }
       };
-    
+
       if (loading) {
         return <div>Loading symptom history...</div>;
       }
-    
+
       if (error) {
         return <div className="text-red-500">Error: {error}</div>;
       }
-    
+
       if (!isAuthenticated) {
         return <div className="text-gray-500 text-center">Please log in to view your symptom history.</div>;
       }
-    
+
       return (
         <div className="bg-white rounded-xl shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">Recent History</h2>
-          
+
           <div className="space-y-4">
             {history.map((log) => (
               <div key={log._id} className="border border-gray-200 rounded-lg p-4 relative">
@@ -118,7 +118,7 @@ import React, { useState, useEffect } from 'react';
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
-                
+
                 <div className="space-y-3">
                   <div>
                     <h4 className="font-medium text-gray-700 mb-2">Symptoms:</h4>
@@ -133,7 +133,7 @@ import React, { useState, useEffect } from 'react';
                       ))}
                     </div>
                   </div>
-                  
+
                   <div>
                     <h4 className="font-medium text-gray-700 mb-2 flex items-center gap-2">
                       <MessageSquare className="h-4 w-4" />

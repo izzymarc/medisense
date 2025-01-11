@@ -9,14 +9,14 @@ import axios from 'axios';
     } from 'firebase/auth';
     import { collection, doc, setDoc, getDoc, getDocs, query, where, deleteDoc, addDoc, orderBy, limit, startAfter } from 'firebase/firestore';
     import { db } from '../firebase';
-    
+
     const api = axios.create({
-      baseURL: 'https://medisense.pages.dev',
+      baseURL: import.meta.env.VITE_API_BASE_URL || '/',
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    
+
     api.interceptors.request.use(config => {
       const token = localStorage.getItem('token');
       if (token) {
@@ -24,19 +24,19 @@ import axios from 'axios';
       }
       return config;
     });
-    
+
     const handleResponse = (response: any) => {
       if (response.status >= 200 && response.status < 300) {
         return response.data;
       }
       throw new Error(`Request failed with status ${response.status}`);
     };
-    
+
     const handleError = (error: any) => {
       console.error('API Error:', error);
       throw error;
       };
-    
+
     export const auth = {
       login: async (email: string, password: string) => {
         try {
@@ -59,7 +59,7 @@ import axios from 'axios';
           handleError(error);
         }
       },
-    
+
       register: async (name: string, email: string, password: string) => {
         try {
           console.log('API: Attempting registration with:', { name, email, password });
@@ -82,7 +82,7 @@ import axios from 'axios';
           handleError(error);
         }
       },
-    
+
       logout: () => {
         signOut(firebaseAuth);
         localStorage.removeItem('token');
@@ -90,7 +90,7 @@ import axios from 'axios';
         console.log('API: Logout successful');
       }
     };
-    
+
     export const profile = {
       get: async () => {
         try {
@@ -109,7 +109,7 @@ import axios from 'axios';
           handleError(error);
         }
       },
-    
+
       update: async (updates: {
         name?: string;
         email?: string;
@@ -138,7 +138,7 @@ import axios from 'axios';
         }
       }
     };
-    
+
     export const gemini = {
       checkSymptoms: async (symptoms: { description: string, severity: string }[]) => {
         try {
@@ -169,7 +169,7 @@ import axios from 'axios';
             aiAdvice,
             timestamp: new Date()
           });
-          
+
           return { aiAdvice };
         } catch (error) {
           console.error('Gemini API Error:', error);
