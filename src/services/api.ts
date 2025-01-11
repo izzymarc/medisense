@@ -171,11 +171,14 @@ import axios from 'axios';
           });
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
+            console.log('Firestore data saved successfully:', docSnap.data());
             return { aiAdvice };
           } else {
+            console.error('Firestore data save failed');
             throw new Error('Failed to save symptoms');
           }
         } catch (error) {
+          console.error('Gemini API Error:', error);
           handleError(error);
         }
       }
