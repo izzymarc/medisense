@@ -1,5 +1,5 @@
-import { auth as firebaseAuth } from '../../src/firebase';
-    import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { auth as firebaseAuth } from '../config/firebase.js';
+    import { admin } from '../config/firebase.js';
     import { ValidationError, AuthenticationError } from '../utils/errors.js';
 
     export const authService = {
@@ -13,10 +13,12 @@ import { auth as firebaseAuth } from '../../src/firebase';
 
       async createUser({ name, email, password }) {
         try {
-          const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
-          const user = userCredential.user;
-          await firebaseAuth.updateProfile(user, { displayName: name });
-          return user;
+          const userRecord = await admin.auth().createUser({
+            email: email,
+            password: password,
+            displayName: name
+          });
+          return userRecord;
         } catch (error) {
           throw new ValidationError('Email already registered');
         }
@@ -28,8 +30,12 @@ import { auth as firebaseAuth } from '../../src/firebase';
 
       async validateLogin({ email, password }) {
         try {
-          const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
-          return userCredential.user;
+          const userRecord = await admin.auth().getUserByEmail(email);
+          if (!userRecord) {
+            throw new AuthenticationError('Invalid credentials');
+          }
+          await admin.auth().signInWithEmailAndPassword(email, password);
+          return userRecord;
         } catch (error) {
           throw new AuthenticationError('Invalid credentials');
         }

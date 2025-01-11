@@ -75,7 +75,7 @@ addEventListener('fetch', event => {
         const body = await request.json();
         const { email, password } = body;
 
-        const response = await fetch('https://medisense.pages.dev/api/auth/login', { // Corrected URL
+        const response = await fetch('/api/auth/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ addEventListener('fetch', event => {
         const body = await request.json();
         const { name, email, password } = body;
 
-        const response = await fetch('https://medisense.pages.dev/api/auth/register', { // Corrected URL
+        const response = await fetch('/api/auth/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ addEventListener('fetch', event => {
     async function handleGetProfile(request) {
       try {
         const token = request.headers.get('Authorization')?.replace('Bearer ', '');
-        const response = await fetch('https://medisense.pages.dev/api/profile', { // Corrected URL
+        const response = await fetch('/api/profile', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ addEventListener('fetch', event => {
       try {
         const token = request.headers.get('Authorization')?.replace('Bearer ', '');
         const formData = await request.formData();
-        const response = await fetch('https://medisense.pages.dev/api/profile', { // Corrected URL
+        const response = await fetch('/api/profile', {
           method: 'PATCH',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -192,7 +192,7 @@ addEventListener('fetch', event => {
         const token = request.headers.get('Authorization')?.replace('Bearer ', '');
         const body = await request.json();
 
-        const response = await fetch('https://medisense.pages.dev/api/symptoms/check', { // Corrected URL
+        const response = await fetch('/api/symptoms/check', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -225,7 +225,7 @@ addEventListener('fetch', event => {
         const page = url.searchParams.get('page');
         const limit = url.searchParams.get('limit');
 
-        const response = await fetch(`https://medisense.pages.dev/api/symptoms/history?page=${page}&limit=${limit}`, { // Corrected URL
+        const response = await fetch(`/api/symptoms/history?page=${page}&limit=${limit}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -255,7 +255,7 @@ addEventListener('fetch', event => {
         const token = request.headers.get('Authorization')?.replace('Bearer ', '');
         const logId = request.url.split('/').pop();
 
-        const response = await fetch(`https://medisense.pages.dev/api/symptoms/history/${logId}`, { // Corrected URL
+        const response = await fetch(`/api/symptoms/history/${logId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

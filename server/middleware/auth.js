@@ -1,4 +1,4 @@
-import { auth as firebaseAuth } from '../../src/firebase';
+import { auth as firebaseAuth } from '../config/firebase.js';
 
     export const auth = async (req, res, next) => {
       try {
