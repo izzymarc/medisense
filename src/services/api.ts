@@ -11,7 +11,7 @@ import axios from 'axios';
     import { db } from '../firebase';
     
     const api = axios.create({
-      baseURL: '/',
+      baseURL: 'https://medisense.pages.dev',
       headers: {
         'Content-Type': 'application/json',
       },
