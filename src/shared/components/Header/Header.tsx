@@ -2,9 +2,11 @@ import React from 'react';
 import { NavLink } from '../NavLink';
 import { useAuth } from '../../../presentation/contexts/AuthContext';
 import { Button } from '../Button';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export function Header() {
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
 
   return (
     <header className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg">
@@ -20,27 +22,27 @@ export function Header() {
               {user && (
                 <>
                   <li>
-                    <NavLink to="/dashboard" aria-label="Dashboard">
-                      Dashboard
+                    <NavLink to="/dashboard" aria-label={t('dashboard')}>
+                      {t('dashboard')}
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/history" aria-label="History">
-                      History
+                    <NavLink to="/history" aria-label={t('history')}>
+                      {t('history')}
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/profile" aria-label="Profile">
-                      Profile
+                    <NavLink to="/profile" aria-label={t('profile')}>
+                      {t('profile')}
                     </NavLink>
                   </li>
                   <li>
                     <Button
                       onClick={logout}
-                      aria-label="Logout"
+                      aria-label={t('logout')}
                       className="bg-white text-blue-600 hover:bg-blue-50"
                     >
-                      Logout
+                      {t('logout')}
                     </Button>
                   </li>
                 </>

@@ -1,30 +1,37 @@
+import logger from '../config/logger.js';
+
 // Custom error classes
-    export class ValidationError extends Error {
-      constructor(message) {
-        super(message);
-        this.name = 'ValidationError';
-        this.status = 400;
-      }
-    }
+export class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ValidationError';
+    this.status = 400;
+  }
+}
 
-    export class AuthenticationError extends Error {
-      constructor(message) {
-        super(message);
-        this.name = 'AuthenticationError';
-        this.status = 401;
-      }
-    }
+export class AuthenticationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'AuthenticationError';
+    this.status = 401;
+  }
+}
 
-    // Error handler middleware
-    export const errorHandler = (err, req, res, next) => {
-      console.error(err);
+// Error handler middleware
+export const errorHandler = (err, req, res, next) => {
+  logger.error({
+    message: 'Error',
+    error: err.message,
+    stack: err.stack,
+    url: req.originalUrl,
+  });
 
-      if (err instanceof ValidationError || err instanceof AuthenticationError) {
-        return res.status(err.status).json({ error: err.message });
-      }
+  if (err instanceof ValidationError || err instanceof AuthenticationError) {
+    return res.status(err.status).json({ error: err.message });
+  }
 
-      res.status(500).json({
-        error: 'Something went wrong',
-        details: process.env.NODE_ENV === 'development' ? err.message : undefined
-      });
-    };
+  res.status(500).json({
+    error: 'Something went wrong',
+    details: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
+};
