@@ -1,5 +1,5 @@
 <diff path="src/pages/LandingPage.tsx">
-@@ -1,11 +1,13 @@
+      @@ -1,10 +1,12 @@
  import React, { useEffect } from 'react';
 +import { Helmet } from 'react-helmet-async';
  import { Header } from '../components/Header';
@@ -8,7 +8,6 @@
  import { Testimonials } from '../components/landing/Testimonials';
  import { CTASection } from '../components/landing/CTASection';
  import { Footer } from '../components/landing/Footer';
--
 +    
  export function LandingPage() {
 -        useEffect(() => {

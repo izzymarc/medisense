@@ -1,5 +1,5 @@
 <diff path="src/pages/RegisterPage.tsx">
-@@ -1,13 +1,14 @@
+      @@ -1,13 +1,14 @@
  import React, { useState, useEffect } from 'react';
  import { useNavigate } from 'react-router-dom';
 +import { Helmet } from 'react-helmet-async';

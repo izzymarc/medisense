@@ -1,32 +1,16 @@
 <file path="src/pages/SecurityPage.tsx">
       import React, { useEffect } from 'react';
       import { Header } from '../components/Header';
-
++     import { Helmet } from 'react-helmet-async';
+ 
       export function SecurityPage() {
         useEffect(() => {
           document.title = "Security - MediSense AI";
         }, []);
         return (
           <div className="min-h-screen bg-gray-50">
++           <Helmet><title>Security - MediSense AI</title></Helmet>
             <Header />
             <main className="container mx-auto px-4 py-16 text-center">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">Security</h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Learn about our security measures.
-              </p>
-              <div className="prose prose-lg mx-auto">
-                <p>
-                  This page will detail our security practices.
-                </p>
-                <ul>
-                  <li>Data Encryption</li>
-                  <li>Secure Authentication</li>
-                  <li>Regular Security Audits</li>
-                  <li>Privacy Compliance</li>
-                </ul>
-              </div>
-            </main>
-          </div>
-        );
-      }
-    </file>
+</file>

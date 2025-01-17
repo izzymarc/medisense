@@ -1,5 +1,5 @@
 <diff path="src/pages/HistoryPage.tsx">
-@@ -1,11 +1,13 @@
+      @@ -1,11 +1,13 @@
  import React, { useEffect } from 'react';
 +import { Helmet } from 'react-helmet-async';
  import { Header } from '../components/Header';
