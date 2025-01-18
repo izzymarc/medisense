@@ -1,5 +1,4 @@
-
-    <diff path="src/App.tsx">
+<diff path="src/App.tsx">
       @@ -1,39 +1,41 @@
 -import React from 'react';
 -import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -37,4 +36,4 @@
 -          <Route path="/about" element={<AboutPage />} />
 -          <Route
 -            path="/dashboard"
--            
+-
