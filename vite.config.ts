@@ -39,6 +39,7 @@
           }),
         ],
         build: {
+          outDir: 'dist',
           rollupOptions: {
             output: {
               manualChunks(id) {
