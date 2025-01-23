@@ -1,7 +1,6 @@
-<file path="src/pages/PrivacyPage.tsx">
-      import React, { useEffect } from 'react';
-      import { Header } from '../components/Header';
-      import { Helmet } from 'react-helmet-async';
+import React, { useEffect } from 'react';
+import { Header } from '../components/Header';
+import { Helmet } from 'react-helmet-async';
       import { Shield, Lock, FileText, Eye } from 'lucide-react';
 
       export function PrivacyPage() {
@@ -57,5 +56,4 @@
             </main>
           </div>
         );
-      }
-    </file>
+    }

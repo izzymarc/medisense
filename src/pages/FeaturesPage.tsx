@@ -1,7 +1,6 @@
-<file path="src/pages/FeaturesPage.tsx">
-      import React, { useEffect } from 'react';
-      import { Header } from '../components/Header';
-      import { Helmet } from 'react-helmet-async';
+import React, { useEffect } from 'react';
+import { Header } from '../components/Header';
+import { Helmet } from 'react-helmet-async';
 
       export function FeaturesPage() {
         useEffect(() => {
@@ -29,5 +28,4 @@
             </main>
           </div>
         );
-      }
-    </file>
+    }

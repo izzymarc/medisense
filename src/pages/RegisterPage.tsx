@@ -1,6 +1,5 @@
-<file path="src/pages/RegisterPage.tsx">
-      import React, { useState, useEffect } from 'react';
-      import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
       import { PublicHeader } from '../components/PublicHeader';
       import { AuthCard } from '../components/auth/AuthCard';
       import { FormInput } from '../components/auth/FormInput';
@@ -10,11 +9,11 @@
       import { useAuth } from '../contexts/AuthContext';
       import { Helmet } from 'react-helmet-async';
 
-      export function RegisterPage() {
-        const navigate = useNavigate();
-        const { register } = useAuth();
-        const [isLoading, setIsLoading] = useState(false);
-        const [error, setError] = useState('');
+    export function RegisterPage() {
+    const navigate = useNavigate();
+    const { register } = useAuth();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
         useEffect(() => {
           document.title = "Register - MediSense AI";
@@ -108,5 +107,4 @@
             </AuthCard>
           </div>
         );
-      }
-    </file>
+    }

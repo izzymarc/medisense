@@ -1,5 +1,4 @@
-
-    <file path="src/pages/TermsPage.tsx">
+<file path="src/pages/TermsPage.tsx">
       import React, { useEffect } from 'react';
       import { Header } from '../components/Header';
       import { Helmet } from 'react-helmet-async';

@@ -1,16 +1,16 @@
-<file path="src/pages/ProfilePage.tsx">
-      import React, { useEffect } from 'react';
-      import { Helmet } from 'react-helmet-async';
-      import { Header } from '../components/Header';
-      import { ProfileInfo } from '../components/profile/ProfileInfo';
-      import { ProfileSettings } from '../components/profile/ProfileSettings';
-      import { useAuth } from '../contexts/AuthContext';
+import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Header } from '../components/Header';
+import { ProfileInfo } from '../components/profile/ProfileInfo';
+import { ProfileSettings } from '../components/profile/ProfileSettings';
+import { useAuth } from '../contexts/AuthContext';
 
-      export function ProfilePage() {
-        const { user } = useAuth();
-        useEffect(() => {
-          document.title = "Profile - MediSense AI";
-        }, []);
+    export function ProfilePage() {
+    const { user } = useAuth();
+    useEffect(() => {
+        document.title = "Profile - MediSense AI";
+        return () => {};
+    }, []);
         if (!user) return null;
 
         return (
@@ -28,5 +28,4 @@
             </main>
           </div>
         );
-      }
-    </file>
+    }

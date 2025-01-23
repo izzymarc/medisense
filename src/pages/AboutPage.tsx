@@ -1,13 +1,15 @@
-<file path="src/pages/AboutPage.tsx">
-      import React, { useEffect } from 'react';
-      import { Helmet } from 'react-helmet-async';
-      import { Header } from '../components/Header';
-      import { Activity, Heart, Shield, Users } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Header } from '../components/Header';
+import { Activity, Heart, Shield, Users } from 'lucide-react';
 
-      export function AboutPage() {
-        useEffect(() => {
-          document.title = "About MediSense AI";
-        }, []);
+    export function AboutPage() {
+    useEffect(() => {
+        document.title = "About MediSense AI";
+        return () => {
+        document.title = "MediSense AI";
+        };
+    }, []);
         return (
           <div className="min-h-screen bg-gray-50">
             <Helmet><title>About Us - MediSense AI</title></Helmet>
@@ -52,5 +54,4 @@
             </main>
           </div>
         );
-      }
-    </file>
+    }

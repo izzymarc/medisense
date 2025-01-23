@@ -1,7 +1,6 @@
-<file path="src/pages/SupportPage.tsx">
-      import React from 'react';
-      import { Header } from '../components/Header';
-      import { Helmet } from 'react-helmet-async';
+import React from 'react';
+import { Header } from '../components/Header';
+import { Helmet } from 'react-helmet-async';
 
       export function SupportPage() {
         return (
@@ -26,5 +25,4 @@
             </main>
           </div>
         );
-      }
-    </file>
+    }

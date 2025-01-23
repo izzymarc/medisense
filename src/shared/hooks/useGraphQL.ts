@@ -1,5 +1,4 @@
-<file path="src/shared/hooks/useGraphQL.ts">
-      import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
       interface GraphQLOptions {
         headers?: Record<string, string>;
@@ -53,5 +52,4 @@
         }, [fetchData]);
 
         return { data, loading, error, refetch: fetchData };
-      }
-    </file>
+    }

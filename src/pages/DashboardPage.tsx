@@ -1,5 +1,4 @@
-<file path="src/pages/DashboardPage.tsx">
-      import React, { useEffect } from 'react';
+import React, { useEffect } from 'react';
       import { Helmet } from 'react-helmet-async';
       import { Header } from '../components/Header';
       import { SymptomChecker } from '../components/SymptomChecker';
@@ -30,5 +29,4 @@
             </main>
           </div>
         );
-      }
-    </file>
+    }

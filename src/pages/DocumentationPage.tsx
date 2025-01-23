@@ -1,12 +1,14 @@
-<file path="src/pages/DocumentationPage.tsx">
-      import React, { useEffect } from 'react';
-      import { Header } from '../components/Header';
-      import { Helmet } from 'react-helmet-async';
+import React, { useEffect } from 'react';
+import { Header } from '../components/Header';
+import { Helmet } from 'react-helmet-async';
 
-      export function DocumentationPage() {
-        useEffect(() => {
-          document.title = "Documentation - MediSense AI";
-        }, []);
+    export function DocumentationPage() {
+    useEffect(() => {
+        document.title = "Documentation - MediSense AI";
+        return () => {
+        document.title = "MediSense AI";
+        };
+    }, []);
         return (
           <div className="min-h-screen bg-gray-50">
             <Helmet><title>Documentation - MediSense AI</title></Helmet>
@@ -29,5 +31,4 @@
             </main>
           </div>
         );
-      }
-    </file>
+    }

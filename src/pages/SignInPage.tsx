@@ -1,6 +1,5 @@
-<file path="src/pages/SignInPage.tsx">
-      import React, { useState, useEffect } from 'react';
-      import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
       import { Helmet } from 'react-helmet-async';
       import { PublicHeader } from '../components/PublicHeader';
       import { AuthCard } from '../components/auth/AuthCard';
@@ -10,11 +9,11 @@
       import { ErrorMessage } from '../components/ErrorMessage';
       import { useAuth } from '../contexts/AuthContext';
 
-      export function SignInPage() {
-        const navigate = useNavigate();
-        const { login } = useAuth();
-        const [isLoading, setIsLoading] = useState(false);
-        const [error, setError] = useState('');
+    export function SignInPage() {
+    const navigate = useNavigate();
+    const { login } = useAuth();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
         useEffect(() => {
           document.title = "Sign In - MediSense AI";
@@ -83,5 +82,4 @@
             </AuthCard>
           </div>
         );
-      }
-    </file>
+    }

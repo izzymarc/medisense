@@ -1,13 +1,13 @@
-<file path="src/pages/NotFoundPage.tsx">
-      import React, { useEffect } from 'react';
-      import { Helmet } from 'react-helmet-async';
-      import { Header } from '../components/Header';
-      import { NavLink } from '../components/NavLink';
+import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Header } from '../components/Header';
+import { NavLink } from '../components/NavLink';
 
-      export function NotFoundPage() {
-        useEffect(() => {
-          document.title = "Page Not Found - MediSense AI";
-        }, []);
+    export function NotFoundPage() {
+    useEffect(() => {
+        document.title = "Page Not Found - MediSense AI";
+        return () => {};
+    }, []);
         return (
           <div className="min-h-screen bg-gray-50">
             <Helmet><title>Page Not Found - MediSense AI</title></Helmet>
@@ -23,5 +23,4 @@
             </main>
           </div>
         );
-      }
-    </file>
+    }
