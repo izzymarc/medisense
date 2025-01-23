@@ -1,5 +1,3 @@
-import logger from '../config/logger.js';
-
 // Custom error classes
 export class ValidationError extends Error {
   constructor(message) {
@@ -19,18 +17,13 @@ export class AuthenticationError extends Error {
 
 // Error handler middleware
 export const errorHandler = (err, req, res, next) => {
-  logger.error({
-    message: 'Error',
-    error: err.message,
-    stack: err.stack,
-    url: req.originalUrl,
-  });
+  console.error(err);
 
   if (err instanceof ValidationError || err instanceof AuthenticationError) {
     return res.status(err.status).json({ error: err.message });
   }
 
-  res.status(500).json({
+  res.status(500).json({ 
     error: 'Something went wrong',
     details: process.env.NODE_ENV === 'development' ? err.message : undefined
   });
