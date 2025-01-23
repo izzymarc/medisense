@@ -1,16 +1,29 @@
 import { Navigate, useLocation } from 'react-router-dom';
-    import { useAuth } from '../contexts/AuthContext';
-    import React from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import React from 'react';
 
-    export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-      const { isAuthenticated } = useAuth();
-      const location = useLocation();
+interface ProtectedRouteProps {
+children: React.ReactNode;
+}
 
-      if (!isAuthenticated) {
-        console.log('ProtectedRoute: Not authenticated, redirecting to /signin');
-        return <Navigate to="/signin" state={{ from: location }} replace />;
-      }
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
+const { isAuthenticated, isLoading } = useAuth();
+const location = useLocation();
 
-      console.log('ProtectedRoute: Authenticated, rendering children');
-      return <>{children}</>;
-    }
+// Show loading spinner while checking auth state
+if (isLoading) {
+    return (
+    <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary" />
+    </div>
+    );
+}
+
+// Redirect to sign in page if not authenticated
+if (!isAuthenticated) {
+    return <Navigate to="/signin" state={{ from: location }} replace />;
+}
+
+// Render children if authenticated
+return <>{children}</>;
+}

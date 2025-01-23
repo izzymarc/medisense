@@ -1,5 +1,7 @@
-import { SymptomCheck } from '../models/SymptomCheck.js';
-    import axios from 'axios';
+import axios from 'axios';
+    import { auth as firebaseAuth } from '../../src/firebase';
+    import { collection, addDoc, getDocs, query, where, orderBy, limit, startAfter, doc, deleteDoc } from 'firebase/firestore';
+    import { db } from '../../src/firebase';
 
     const geminiApiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
 
@@ -7,6 +9,11 @@ import { SymptomCheck } from '../models/SymptomCheck.js';
       create: async (req, res) => {
         try {
           const { symptoms } = req.body;
+          const user = firebaseAuth.currentUser;
+
+          if (!user) {
+            return res.status(401).json({ error: 'User not authenticated' });
+          }
 
           if (!symptoms || !Array.isArray(symptoms) || symptoms.length === 0) {
             return res.status(400).json({ error: 'Symptoms array is required and cannot be empty' });
@@ -27,13 +34,14 @@ import { SymptomCheck } from '../models/SymptomCheck.js';
 
           const aiAdvice = response.data.candidates[0].content.parts[0].text;
 
-          const symptomCheck = new SymptomCheck({
-            userId: req.userId,
+          const symptomCollection = collection(db, 'symptoms');
+          await addDoc(symptomCollection, {
+            userId: user.uid,
             symptoms,
-            aiAdvice
+            aiAdvice,
+            timestamp: new Date()
           });
-          
-          await symptomCheck.save();
+
           res.status(201).json({ aiAdvice, success: true });
         } catch (error) {
           res.status(400).json({ error: error.message, details: error.response?.data });
@@ -42,20 +50,35 @@ import { SymptomCheck } from '../models/SymptomCheck.js';
 
       getHistory: async (req, res) => {
         try {
+          const user = firebaseAuth.currentUser;
+          if (!user) {
+            return res.status(401).json({ error: 'User not authenticated' });
+          }
           const page = parseInt(req.query.page) || 1;
-          const limit = parseInt(req.query.limit) || 5;
-          const skip = (page - 1) * limit;
-
-          const history = await SymptomCheck.find({ userId: req.userId })
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit);
-
-          const totalCount = await SymptomCheck.countDocuments({ userId: req.userId });
-          const totalPages = Math.ceil(totalCount / limit);
+          const limitPerPage = parseInt(req.query.limit) || 5;
+          const symptomCollection = collection(db, 'symptoms');
+          let q = query(
+            symptomCollection,
+            where('userId', '==', user.uid),
+            orderBy('timestamp', 'desc'),
+            limit(limitPerPage)
+          );
+          const querySnapshot = await getDocs(q);
+          const symptomHistory = querySnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+              _id: doc.id,
+              symptoms: data.symptoms,
+              aiAdvice: data.aiAdvice,
+              createdAt: data.timestamp.toDate().toLocaleDateString(),
+              userId: data.userId
+            };
+          });
+          const totalCount = querySnapshot.size;
+          const totalPages = Math.ceil(totalCount / limitPerPage);
 
           res.json({
-            history,
+            history: symptomHistory,
             page,
             totalPages,
             totalCount
