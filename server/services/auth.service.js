@@ -1,5 +1,5 @@
-import { auth as firebaseAuth } from '../config/firebase.js';
-    import { admin } from '../config/firebase.js';
+import { User } from '../models/User.js';
+    import jwt from 'jsonwebtoken';
     import { ValidationError, AuthenticationError } from '../utils/errors.js';
 
     export const authService = {
@@ -11,33 +11,26 @@ import { auth as firebaseAuth } from '../config/firebase.js';
         }
       },
 
+      async checkExistingUser(email) {
+        const user = await User.findOne({ email });
+        if (user) throw new ValidationError('Email already registered');
+      },
+
       async createUser({ name, email, password }) {
-        try {
-          const userRecord = await admin.auth().createUser({
-            email: email,
-            password: password,
-            displayName: name
-          });
-          return userRecord;
-        } catch (error) {
-          throw new ValidationError('Email already registered');
-        }
+        const user = new User({ name, email, password });
+        await user.save();
+        return user;
       },
 
       generateToken(userId) {
-        return userId;
+        return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
       },
 
       async validateLogin({ email, password }) {
-        try {
-          const userRecord = await admin.auth().getUserByEmail(email);
-          if (!userRecord) {
-            throw new AuthenticationError('Invalid credentials');
-          }
-          await admin.auth().signInWithEmailAndPassword(email, password);
-          return userRecord;
-        } catch (error) {
+        const user = await User.findOne({ email });
+        if (!user || !(await user.comparePassword(password))) {
           throw new AuthenticationError('Invalid credentials');
         }
+        return user;
       }
     };

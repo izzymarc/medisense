@@ -23,7 +23,7 @@ import React, { useState, useEffect } from 'react';
           setError('');
           try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`/api/symptoms/history?page=${page}&limit=${limit}`, {
+            const response = await axios.get(`http://localhost:5000/api/symptoms/history?page=${page}&limit=${limit}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -50,7 +50,7 @@ import React, { useState, useEffect } from 'react';
       const handleDelete = async (logId: string) => {
         try {
           const token = localStorage.getItem('token');
-          await axios.delete(`/api/symptoms/history/${logId}`, {
+          await axios.delete(`http://localhost:5000/api/symptoms/history/${logId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -76,7 +76,7 @@ import React, { useState, useEffect } from 'react';
       return (
         <div className="bg-white rounded-xl shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">Recent History</h2>
-
+          
           <div className="space-y-4">
             {history.map((log) => (
               <div key={log._id} className="border border-gray-200 rounded-lg p-4 relative">
@@ -92,7 +92,7 @@ import React, { useState, useEffect } from 'react';
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
-
+                
                 <div className="space-y-3">
                   <div>
                     <h4 className="font-medium text-gray-700 mb-2">Symptoms:</h4>
@@ -107,7 +107,7 @@ import React, { useState, useEffect } from 'react';
                       ))}
                     </div>
                   </div>
-
+                  
                   <div>
                     <h4 className="font-medium text-gray-700 mb-2 flex items-center gap-2">
                       <MessageSquare className="h-4 w-4" />
