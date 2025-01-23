@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth as authApi, profile as profileApi } from '../services/api';
+import { auth as authApi } from '../services/api';
 
 interface User {
   id: string;
@@ -84,15 +84,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     currentPassword?: string;
     newPassword?: string;
   }) => {
-    try {
-      const updatedUser = await profileApi.update(updates);
-      setUser(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      console.log('AuthContext: Profile update successful, user:', updatedUser);
-    } catch (error) {
-      console.error('Profile update failed:', error);
-      throw error;
-    }
+    // try {
+    //   const updatedUser = await profileApi.update(updates);
+    //   setUser(updatedUser);
+    //   localStorage.setItem('user', JSON.stringify(updatedUser));
+    //   console.log('AuthContext: Profile update successful, user:', updatedUser);
+    // } catch (error) {
+    //   console.error('Profile update failed:', error);
+    //   throw error;
+    // }
   };
 
   if (loading) {
