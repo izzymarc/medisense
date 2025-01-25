@@ -1,10 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://44.206.253.140:5000/api/v1',
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: 'http://localhost:5000/api'
 });
 
 api.interceptors.request.use(config => {
@@ -15,58 +12,28 @@ api.interceptors.request.use(config => {
   return config;
 });
 
-const handleResponse = (response: any) => {
-  if (response.status >= 200 && response.status < 300) {
-    return response.data;
-  }
-  throw new Error(`Request failed with status ${response.status}`);
-};
-
-const handleError = (error: any) => {
-  console.error('API Error:', error);
-  throw error;
-};
-
 export const auth = {
   login: async (email: string, password: string) => {
-    try {
-      console.log('API: Attempting login with:', { email, password });
-      const response = await api.post('/auth/login', { email, password });
-      const data = handleResponse(response);
-      localStorage.setItem('token', data.token);
-      console.log('API: Login successful, response:', data);
-      return data;
-    } catch (error) {
-      console.error('API: Login failed:', error);
-      handleError(error);
-    }
+    const { data } = await api.post('/auth/login', { email, password });
+    localStorage.setItem('token', data.token);
+    return data;
   },
-
+  
   register: async (name: string, email: string, password: string) => {
-    try {
-      const response = await api.post('/auth/register', { name, email, password });
-      const data = handleResponse(response);
-      localStorage.setItem('token', data.token);
-      return data;
-    } catch (error) {
-      handleError(error);
-    }
+    const { data } = await api.post('/auth/register', { name, email, password });
+    localStorage.setItem('token', data.token);
+    return data;
   },
-
+  
   logout: () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
   }
 };
 
 export const profile = {
   get: async () => {
-    try {
-      const response = await api.get('/profile');
-      return handleResponse(response);
-    } catch (error) {
-      handleError(error);
-    }
+    const { data } = await api.get('/profile');
+    return data;
   },
 
   update: async (updates: {
@@ -74,28 +41,8 @@ export const profile = {
     email?: string;
     currentPassword?: string;
     newPassword?: string;
-    profilePicture?: string;
   }) => {
-    try {
-      const response = await api.patch('/profile', updates, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return handleResponse(response);
-    } catch (error) {
-      handleError(error);
-    }
-  }
-};
-
-export const gemini = {
-  checkSymptoms: async (symptoms: { description: string, severity: string }[]) => {
-    try {
-      const response = await api.post('/symptoms/check', { symptoms });
-      return handleResponse(response);
-    } catch (error) {
-      handleError(error);
-    }
+    const { data } = await api.patch('/profile', updates);
+    return data;
   }
 };

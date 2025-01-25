@@ -1,14 +1,18 @@
-import jwt from 'jsonwebtoken';
+import { getAuth } from 'firebase-admin/auth';
+import { AuthenticationError } from '../utils/errors.js';
 
-    export const auth = async (req, res, next) => {
-      try {
-        const token = req.header('Authorization')?.replace('Bearer ', '');
-        if (!token) throw new Error();
+export const auth = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization?.split('Bearer ')[1];
+    if (!token) throw new AuthenticationError('No token provided');
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.userId = decoded.userId;
-        next();
-      } catch (error) {
-        res.status(401).json({ error: 'Please authenticate' });
-      }
+    const decodedToken = await getAuth().verifyIdToken(token);
+    req.user = {
+      uid: decodedToken.uid,
+      email: decodedToken.email
     };
+    next();
+  } catch (error) {
+    next(new AuthenticationError('Invalid token'));
+  }
+};

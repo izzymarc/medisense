@@ -1,59 +1,42 @@
+import serverless from 'serverless-http';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { errorHandler } from './utils/errors.js';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import mongoose from 'mongoose';
+import authRoutes from './routes/auth.js';
+import profileRoutes from './routes/profile.js';
+import symptomRoutes from './routes/symptom.js';
+import { initializeApp, cert } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
 
 dotenv.config();
 
+// Initialize Firebase Admin
+initializeApp({
+  credential: cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
+  })
+});
+
 const app = express();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://medisense.pages.dev', 'https://*.medisense.pages.dev']
+    : '*'
+}));
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes - REMOVE MONGO ROUTES
-// app.use('/api/auth', authRoutes);
-// app.use('/api/profile', profileRoutes);
-// app.use('/api/symptoms', symptomRoutes);
-
-// Test DB Route - REMOVE MONGO TEST
-app.get('/test-db', async (req, res) => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    res.send('Database connection successful!');
-  } catch (error) {
-    console.error('Database connection failed:', error);
-    res.status(500).send(`Database connection failed: ${error.message}`);
-  } finally {
-    await mongoose.disconnect();
-  }
-});
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/profile', profileRoutes);
+app.use('/api/symptoms', symptomRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
 
-// Serve index.html for all other routes
-app.use((req, res, next) => {
-  if (!req.url.startsWith('/api')) {
-    res.sendFile(path.join(__dirname, '../dist', 'index.html'));
-  } else {
-    next();
-  }
-});
-
-// Connect to MongoDB before starting the server - REMOVE MONGO CONNECTION
-// connectDB().then(() => {
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-// }).catch(err => {
-//   console.error('Failed to connect to MongoDB:', err);
-// });
+// Serverless handler
+export const handler = serverless(app);
