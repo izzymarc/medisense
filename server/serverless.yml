@@ -1,22 +1,56 @@
 service: medisense-api
 
+frameworkVersion: '3'
+
+plugins:
+  - serverless-dotenv-plugin
+
 provider:
   name: aws
   runtime: nodejs18.x
-  stage: ${opt:stage, 'prod'}
-  region: ${opt:region, 'us-east-1'}
+  stage: prod
+  region: us-east-1
   environment:
-    NODE_ENV: ${opt:stage, 'prod'}
-    FIREBASE_PROJECT_ID: ${env:FIREBASE_PROJECT_ID}
-    FIREBASE_PRIVATE_KEY: ${env:FIREBASE_PRIVATE_KEY}
-    FIREBASE_CLIENT_EMAIL: ${env:FIREBASE_CLIENT_EMAIL}
-    GEMINI_API_KEY: ${env:GEMINI_API_KEY}
+    NODE_ENV: production
+  httpApi:
+    cors:
+      allowedOrigins:
+        - https://medisense.pages.dev
+        - https://*.medisense.pages.dev
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      allowedMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - PATCH
+      allowCredentials: true
+      maxAge: 300
 
 functions:
   api:
     handler: index.handler
     events:
-      - http:
-          path: /{proxy+}
-          method: ANY
-          cors: true
+      - httpApi: '*'
+    environment:
+      FIREBASE_PROJECT_ID: ${env:FIREBASE_PROJECT_ID}
+      FIREBASE_PRIVATE_KEY: ${env:FIREBASE_PRIVATE_KEY}
+      FIREBASE_CLIENT_EMAIL: ${env:FIREBASE_CLIENT_EMAIL}
+      GEMINI_API_KEY: ${env:GEMINI_API_KEY}
+
+package:
+  patterns:
+    - '!node_modules/.cache/**'
+    - '!test/**'
+    - '!.env*'
+    - '!.git/**'
+    - '!README.md'
+    - 'index.js'
+    - 'package.json'
+    - 'routes/**'
+    - 'controllers/**'
+    - 'services/**'
+    - 'utils/**'
+    - 'middleware/**'
